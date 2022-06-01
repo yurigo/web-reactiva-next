@@ -1,18 +1,33 @@
-import { useAppContext } from "../state/AppContext";
+import { cloneElement , useState } from "react";
+
+import NavBar from "./navbar";
+import Footer from "./footer";
 import AudioPlayer from "./AudioPlayer";
 
-export default function Layout({ children }) {
+export default function Layout({ children , ...props }) {
 
-  const { activeAudio, setActiveAudio } = useAppContext();
+  // en props tengo allFeedItems?
+
+  const [activeAudio, setActiveAudio] = useState();
 
   return (
     <>
-      <div>arriba</div>
+      <pre>
+      
+      </pre>
+      <NavBar />
+      <div className="sticky top-[70px] flex justify-center z-20">
       <AudioPlayer file={activeAudio} />
-      <hr />
-      <main>{children}</main>
-      <hr />
-      <div>abajo</div>
+      </div>
+      {/* <main>{children}</main> */}
+      <main>
+      {
+        cloneElement(children, {
+              setActiveAudio: setActiveAudio,
+              })
+      }
+      </main>
+      <Footer />
     </>
   );
 }

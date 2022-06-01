@@ -1,5 +1,3 @@
-import { useState, useContext } from 'react';
-
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -7,11 +5,10 @@ import styles from '../styles/Home.module.css'
 import siteMetadata from '../data/siteMetada';
 import { getFeedItems } from '../lib/feed';
 
-import { useAppContext } from '../state/AppContext';
 import EpisodeItem from '../components/EpisodeItem';
 
 export async function getStaticProps() {
-
+  console.log("I'm callign it NOW!!!")
   const allFeedItems = await getFeedItems(siteMetadata.feed);
   return {
     props: {
@@ -20,13 +17,11 @@ export async function getStaticProps() {
   };
 }
 
-export default function Home({ allFeedItems }) {
+export default function Home({ allFeedItems , setActiveAudio }) {
 
-  const { activeAudio, setActiveAudio } = useAppContext();
-
-  const handleEpisodeClick = (file) => {
-    setActiveAudio(file);
-  };
+  const episodeClickHandler = (x) => {
+    setActiveAudio(x)
+  }
 
   return (
     <div className={styles.container}>
@@ -36,17 +31,18 @@ export default function Home({ allFeedItems }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <section className={styles.main}>
         <h1 className={styles.title}>Web Reactiva</h1>
 
         {allFeedItems.map((item) => (
           <EpisodeItem
+            key={item.guid}
             episode={item}
-            handleEpisodeClick={handleEpisodeClick}
+            handleEpisodeClick={episodeClickHandler}
           ></EpisodeItem>
         ))}
 
-        <p className={styles.description}>
+        {/* <p className={styles.description}>
           La tecnología es necesaria, pero las personas somos lo importante!!
         </p>
 
@@ -65,10 +61,8 @@ export default function Home({ allFeedItems }) {
             <h2>Feat 3 &rarr;</h2>
             <p>Lorem ipsum.</p>
           </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}></footer>
+        </div> */}
+      </section>
     </div>
   );
 }
